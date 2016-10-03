@@ -5,11 +5,15 @@ module fetch_tb;
 	reg write_stack = 0;
 	reg hold = 0;
 	reg rst = 1;
+	reg lpm_read = 0;
+	reg [15:0] lpm_addr =0;
 	
 	wire [15:0] opcode;
 	wire [1:0] cycle;
+	wire [7:0] lpm_data;
 
-	avr_cpu_fetch fetch(.clk(clk), .rst(rst), .pc_update(pc_update), .read_stack(read_stack), .write_stack(write_stack), .hold(hold), .opcode(opcode), .cycle(cycle));
+	avr_cpu_fetch fetch(.clk(clk), .rst(rst), .pc_update(pc_update), .read_stack(read_stack), .write_stack(write_stack), 
+	.hold(hold), .opcode(opcode), .cycle(cycle), .lpm_read(lpm_read), .lpm_addr(lpm_addr), .lpm_data(lpm_data));
 
 	always
 		#1 clk <= ~clk;

@@ -14,12 +14,12 @@ module avr_cpu_register(
 	
 	assign z = {register_bank[30],register_bank[31]};
 	
-	wire int_r_addr;
-	wire int_d_addr;
+	wire [4:0] int_r_addr;
+	wire [4:0] int_d_addr;
 	assign int_r_addr = z_r_addr ? z[4:0] : r_addr;
 	assign int_d_addr = z_d_addr ? z[4:0] : d_addr;
 	
-	always @ (posedge clk)
+	always @ (int_r_addr, int_d_addr, write, in)
 	begin
 		r_out <= register_bank[int_r_addr];
 		d_out <= register_bank[int_d_addr];

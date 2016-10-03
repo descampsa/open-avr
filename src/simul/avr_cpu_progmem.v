@@ -9,10 +9,7 @@ module avr_cpu_progmem(
 	reg[15:0] k;
 	initial
 	begin
-		for(k=0; k<511; k=k+1)
-		begin
-			mem[k] = k;
-		end
+		$readmemh("../../bench/progmem.hex", mem);
 	end
 	
 	always @ (posedge clk)

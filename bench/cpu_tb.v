@@ -1,13 +1,14 @@
 module cpu_tb;
 	reg clk = 0;
 	reg rst = 0;
+	reg [7:0] io_in = 0;
 	
 	wire [5:0] io_addr;
 	wire io_read;
 	wire io_write;
-	wire [7:0] io_data;
+	wire [7:0] io_out;
 
-	avr_cpu cpu(.clk(clk),.rst(rst), .io_addr(io_addr), .io_read(io_read), .io_write(io_write), .io_data(io_data));
+	avr_cpu cpu(.clk(clk),.rst(rst), .io_addr(io_addr), .io_read(io_read), .io_write(io_write), .io_in(io_in), .io_out(io_out));
 
 	always
 		#1 clk <= ~clk;

@@ -32,6 +32,9 @@ module avr_cpu_fetch(
 
 	assign lpm_data = lpm_addr[0] ? new_opcode[15:8] : new_opcode[7:0];
 
+	// used to delay output by one clock after reset goes down
+	reg valid = 1'b0;
+
 	// update registers
 	always @ (posedge clk)
 	begin
@@ -40,12 +43,14 @@ module avr_cpu_fetch(
 			cycle <= 1'b0;
 			pc <= 16'b1111111111111111;
 			opcode <= 16'b0000000000000000;
+			valid <= 1'b0;
 		end
 		else
 		begin
+			valid <= 1'b1;
 			if(~lpm_read)
 			begin
-				if(~hold)
+				if(~hold & valid)
 					opcode <= new_opcode;
 				pc <= new_pc;
 			end
