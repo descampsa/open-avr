@@ -2,8 +2,8 @@ module avr_cpu_register(
 	input clk,
 	input [4:0] r_addr,
 	input [4:0] d_addr,
-	output reg [7:0] r_out,
-	output reg [7:0] d_out,
+	output [7:0] r_out,
+	output [7:0] d_out,
 	input [7:0] in,
 	input write,
 	output [15:0] z,
@@ -19,10 +19,11 @@ module avr_cpu_register(
 	assign int_r_addr = z_r_addr ? z[4:0] : r_addr;
 	assign int_d_addr = z_d_addr ? z[4:0] : d_addr;
 	
-	always @ (int_r_addr, int_d_addr, write, in)
+	assign r_out = register_bank[int_r_addr];
+	assign d_out = register_bank[int_d_addr];
+	
+	always @ (posedge clk)
 	begin
-		r_out <= register_bank[int_r_addr];
-		d_out <= register_bank[int_d_addr];
 		if(write)
 			register_bank[d_addr] <= in;
 	end
