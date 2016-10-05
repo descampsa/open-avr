@@ -95,7 +95,7 @@ module avr_cpu_decode(
 				end
 				if(opcode[11:10] == `ALU_OP_SUB) //SUB
 				begin
-					alu_opcode = 4'b1010;
+					alu_opcode = `ALU_OP_SUB;
 					r_addr = {opcode[9],opcode[3:0]};
 					d_addr = opcode[8:4];
 					register_write = 1;
@@ -316,8 +316,7 @@ module avr_cpu_decode(
 				end
 				if({opcode[11:9],opcode[3:0]} == 7'b0100101) //ASR
 				begin
-					alu_opcode = `ALU_OP_RIGHT_SHIFT;
-					alu_bits = 4'd0001;
+					alu_opcode = `ALU_OP_ARITH_RIGHT_SHIFT;
 					d_addr = opcode[8:4];
 					register_write = 1;
 					status_write = 1;
