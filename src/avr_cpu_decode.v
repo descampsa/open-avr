@@ -375,7 +375,7 @@ module avr_cpu_decode(
 				end
 			end
 			4'b1110: begin //SER,LDI
-				alu_opcode = 4'b0000;
+				alu_opcode = `ALU_OP_COPY_TEST;
 				d_addr = {1'b1,opcode[7:4]};
 				use_immediate = 1;
 				register_write = 1;
