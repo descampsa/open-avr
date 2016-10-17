@@ -5,6 +5,7 @@ include(hdl.cmake)
 
 include_directories(src)
 
+add_subdirectory(software)
 add_subdirectory(bench)
 add_subdirectory(pnr)
 
