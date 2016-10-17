@@ -233,7 +233,7 @@ module avr_cpu_decode(
 					register_write = 1;
 					status_write = 1;
 				end
-				if(opcode[11:0] == 12'b01010001000) //RET
+				if(opcode[11:0] == 12'b010100001000) //RET
 				begin
 					if(cycle == 1'b0)
 					begin
