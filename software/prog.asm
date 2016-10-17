@@ -6,12 +6,20 @@
 
 rjmp	main
 
-main:
-	ldi	r,0b11111111
-	out	DDRB,r
-loop:
+turn_off:
 	ldi	r,0x00
 	out	PORTB,r
+	ret
+
+turn_on:
 	ldi	r,0xFF
 	out	PORTB,r
+	ret
+
+main:
+	ldi	r,0xFF
+	out	DDRB,r
+loop:
+	rcall	turn_off
+	rcall	turn_on
 	rjmp	loop
