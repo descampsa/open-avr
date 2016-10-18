@@ -32,7 +32,8 @@ module avr_cpu_alu(
 
 	wire zero = (out == 0);
 	
-	always @ (opcode, use_carry, r_in, d_in, status_in, bits)
+	always @ (opcode, use_carry, r_in, d_in, status_in, bits,
+			carry_in, com, neg, inc, dec, add, sub, and_, or_, xor_)
 	begin
 		//default values
 		out = r_in;
