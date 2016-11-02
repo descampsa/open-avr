@@ -1,6 +1,8 @@
+`include "avr_cpu_common.vh"
+
 module alu_tb;
 
-	reg [2:0] opcode = 0;
+	reg [3:0] opcode = 0;
 	reg use_carry = 0;
 	reg [7:0] r_in = 0;
 	reg [7:0] d_in = 0;
@@ -17,11 +19,16 @@ module alu_tb;
 		$dumpfile("alu_tb.vcd");
 		$dumpvars(0, alu_tb);
 		
-		#1 opcode <= 3'b001;
+		#1 opcode <= `ALU_OP_ADD;
 		r_in <= 8'd40;
 		d_in <= 8'd50;
 		
 		#1 d_in <= 8'd240;
+		
+		#1 opcode <= `ALU_OP_XOR;
+		r_in <= 8'hFF;
+		d_in <= 8'hFF;
+		
 		#10 $finish;
 	end
 
