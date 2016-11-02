@@ -402,7 +402,7 @@ module avr_cpu_decode(
 					t_hold = 1;
 					pc_update = {opcode[9],opcode[9],opcode[9],opcode[9],opcode[9],opcode[9],opcode[9],opcode[9],opcode[9],opcode[9:3]};
 				end
-				if(opcode[11:10] == 2'b00) //BRBC, etc
+				if(opcode[11:10] == 2'b01) //BRBC, etc
 				begin
 					alu_opcode = `ALU_OP_COPY_TEST;
 					alu_bits = {1'b1,opcode[2:0]};
