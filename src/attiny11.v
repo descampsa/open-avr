@@ -8,8 +8,13 @@ module attiny11
 	wire io_read;
 	wire io_write;
 	
-	avr_cpu cpu(.clk(clk), .rst(rst), .io_addr(io_addr), .io_data(io_data), .io_read(io_read), .io_write(io_write));
+	wire rst_inv;
+	
+	avr_cpu cpu(.clk(clk), .rst(~rst_inv), .io_addr(io_addr), .io_data(io_data), .io_read(io_read), .io_write(io_write));
 	avr_gpio#(.IO_ADDR(22), .PORT_WIDTH(6)) 
-		portb_gpio(.clk(clk), .rst(rst), .io_addr(io_addr), .io_data(io_data), .io_read(io_read), .io_write(io_write), .gpio(portb));
+		portb_gpio(.clk(clk), .rst(~rst_inv), .io_addr(io_addr), .io_data(io_data), .io_read(io_read), .io_write(io_write), .gpio(portb));
+	
+	SB_IO #(.PIN_TYPE(6'b000000), .PULLUP(1'b1)) 
+		rst_pin(.PACKAGE_PIN(rst), .D_IN_0(rst_inv), .INPUT_CLK(clk));
 	
 endmodule
