@@ -1,8 +1,8 @@
 set_io clk 21
 set_io rst 112
-set_io portb[0] 113
-set_io portb[1] 114
-set_io portb[2] 115
-set_io portb[3] 116
-set_io portb[4] 117
-set_io portb[5] 118
+set_io portb[0] 95
+set_io portb[1] 96
+set_io portb[2] 97
+set_io portb[3] 98
+set_io portb[4] 99
+set_io portb[5] 101
