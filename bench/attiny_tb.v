@@ -16,7 +16,7 @@ module attiny11_tb;
 		
 		#10 rst = 0;
 		
-		#200 $finish;
+		#500 $finish;
 	end
 
 endmodule
