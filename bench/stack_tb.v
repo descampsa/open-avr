@@ -1,66 +1,49 @@
 module stack_tb;
-	reg clk = 0;
+	reg clk, rst, read, write;
 	wire [8:0] data;
-	reg write = 0;
-	reg read = 0;
+	reg [8:0] data_reg;
+	
+	assign data = data_reg;
 
-	avr_cpu_stack stack(.clk(clk), .data(data), .write(write), .read(read));
-
-	reg [8:0] input_data = 0;
-	wire [8:0] output_data;
-	reg enable_input_data = 0;
-	assign output_data = data;
-	assign data = enable_input_data ? input_data : 9'bz;
+	avr_cpu_stack stack(.clk(clk), .rst(rst), .read(read), .write(write), .data(data));
 
 	always
-		#1 clk <= ~clk;
+		#5 clk = !clk; 
 
 	initial
 	begin
 		$dumpfile("stack_tb.vcd");
-		$dumpvars(0, stack_tb);
+		$dumpvars(0,stack_tb);
+		$dumpvars(0, stack.buffer[0], stack.buffer[1], stack.buffer[2]);
 
-		#1 input_data = 9'd1;
-		enable_input_data = 1;
-		write = 1;
-		
-		#2 enable_input_data = 0; 
-		write = 0;
-		
-		#2 input_data = 9'd2;
-		enable_input_data = 1;
-		write = 1;
+		clk=0;
+		rst=1;
+		read=0;
+		write=0;
+		data_reg='bz;
 
-		#2 enable_input_data = 0; 
-		write = 0;
+		#15;
+		rst=0;
 
-		#2 input_data = 9'd3;
-		enable_input_data = 1;
-		write = 1;
+		#20;
+		write=1;
+		data_reg=1;
 
-		#2 enable_input_data = 0; 
-		write = 0;
+		#10;
+		data_reg=2;
 
-		#2 input_data = 9'd4;
-		enable_input_data = 1;
-		write = 1;
+		#10;
+		data_reg=3;
 
-		#2 enable_input_data = 0; 
-		write = 0;
+		#10
+		write=0;
+		read=1;
+		data_reg='bz;
 
+		#30;
+		read=0;
 
-		#2 read = 1;
-		#2 read = 0;
-	
-		#2 read = 1;
-		#2 read = 0;
-
-		#2 read = 1;
-		#2 read = 0;
-
-		#2 read = 1;
-		#2 read = 0;
-
-		#10 $finish;
+		#50;
+		$finish;
 	end
 endmodule
