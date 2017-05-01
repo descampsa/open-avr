@@ -7,7 +7,9 @@
 
 ldi	r1,0xFF
 ldi	r2,0x00
-out	DDRB,r1
+start:
+out DDRB,r1
 out PORTB,r1
 out PORTB,r2
 out DDRB,r2
+rjmp start
