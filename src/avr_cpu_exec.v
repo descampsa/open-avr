@@ -2,6 +2,9 @@ module avr_cpu_exec
 	(input clk,
 	input rst,
 	input [15:0] opcode,
+	input opcode_cycle,
+	output hold,
+	output [11:0] rjmp,
 	output [5:0] io_addr,
 	inout [7:0] io_data,
 	output io_read,
@@ -20,7 +23,7 @@ module avr_cpu_exec
 	assign alu_r_in = use_immediate ? immediate : io_read ? io_data : r_reg;
 	assign io_data = io_write ? alu_out : 8'bZ;
 	
-	avr_cpu_decode decode(.opcode(opcode), .alu(alu_opcode), .r_addr(r_addr), .d_addr(d_addr), .immediate(immediate), .use_immediate(use_immediate), .io_addr(io_addr), .io_read(io_read), .io_write(io_write));
+	avr_cpu_decode decode(.opcode(opcode), .opcode_cycle(opcode_cycle), .alu(alu_opcode), .r_addr(r_addr), .d_addr(d_addr), .immediate(immediate), .use_immediate(use_immediate), .io_addr(io_addr), .io_read(io_read), .io_write(io_write), .hold(hold), .rjmp(rjmp));
 	avr_cpu_register register(.clk(clk), .rst(rst), .r_addr(r_addr), .d_addr(d_addr), .r_out(r_reg), .d_out(d_reg), .d_in(alu_out));
 	avr_cpu_alu alu(.opcode(alu_opcode), .r_in(alu_r_in), .d_in(d_reg), .out(alu_out));
 endmodule
