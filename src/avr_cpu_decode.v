@@ -3,6 +3,7 @@
 
 module avr_cpu_decode
 	(input [15:0] opcode,
+	input opcode_cycle,
 	output reg [3:0] alu,
 	output reg [4:0] r_addr,
 	output reg [4:0] d_addr,
@@ -10,9 +11,11 @@ module avr_cpu_decode
 	output reg use_immediate,
 	output reg [5:0] io_addr,
 	output reg io_read,
-	output reg io_write);
+	output reg io_write,
+	output reg hold,
+	output reg [11:0] rjmp);
 
-	always @(opcode)
+	always @(opcode, opcode_cycle)
 	begin
 		//default value (result in nop)
 		alu = `ALU_OP_MOVE;
@@ -23,6 +26,8 @@ module avr_cpu_decode
 		io_addr = {opcode[10:9], opcode[3:0]};
 		io_read = 0;
 		io_write = 0;
+		hold = 1'b0;
+		rjmp = 12'b0;
 		
 		case(opcode[15:12])
 			4'b1110: //LDI
@@ -37,6 +42,15 @@ module avr_cpu_decode
 				io_write = opcode[11];
 				io_read = !opcode[11];
 			end
+			4'b1100: //RJMP
+			begin
+				if(opcode_cycle == 0)
+				begin
+					hold = 1'b1;
+					rjmp = opcode[11:0];
+				end
+			end
+			default:;
 		endcase
 	end
 
