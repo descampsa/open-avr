@@ -8,12 +8,10 @@ module avr_cpu_progmem
 	
 	reg [DATA_WIDTH-1:0] mem [0:MEM_SIZE-1];
 	
-`ifdef SIMULATION
 	initial
 	begin
 		$readmemh("prog.hex", mem);
 	end
-`endif
 	
 	always @ (posedge clk)
 	begin
