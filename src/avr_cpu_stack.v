@@ -1,25 +1,32 @@
-module avr_cpu_stack(
-	input clk,
-	inout [8:0] data,
+module avr_cpu_stack
+	#(parameter DATA_WIDTH = 9,
+	parameter STACK_DEPTH = 3,
+	parameter ADDR_WIDTH = $clog2(STACK_DEPTH+1))
+	(input clk,
+	input rst,
+	input read,
 	input write,
-	input read);
+	inout [DATA_WIDTH-1:0] data);
 
-	reg [8:0] stack [0:2];
+	reg [ADDR_WIDTH-1:0] addr;
+	reg [DATA_WIDTH-1:0] buffer [0:STACK_DEPTH-1];
+	reg [DATA_WIDTH-1:0] data_out;
 
-	assign data = read ? stack[0] : 9'bZ;
+	assign data = read ? data_out : {DATA_WIDTH{1'bz}};
 
-	always @ (posedge clk)
+	always @(posedge clk)
 	begin
-		if(write)
-		begin
-			stack[2] <= stack[1];
-			stack[1] <= stack[0];
-			stack[0] <= data;
-		end
+		if(rst)
+			addr <= 0;
 		else if(read)
-		begin
-			stack[0] <= stack[1];
-			stack[1] <= stack[2];
-		end
+			addr <= addr-1;
+		else if(write)
+			addr <= addr+1;
+
+		if(write)
+			buffer[addr] <= data;
+
+		data_out <= buffer[addr-1];
 	end
+
 endmodule

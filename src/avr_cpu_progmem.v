@@ -1,9 +1,19 @@
-module avr_cpu_progmem(
-	input clk,
-	input [8:0] addr,
-	output [15:0] data);
+module avr_cpu_progmem
+	#(parameter ADDR_WIDTH = 9,
+	parameter DATA_WIDTH = 16,
+	parameter MEM_SIZE = 512)
+	(input clk,
+	input [ADDR_WIDTH-1:0] addr,
+	output reg [DATA_WIDTH-1:0] data);
 	
-	reg [15:0] mem [0:511];
+	reg [DATA_WIDTH-1:0] mem [0:MEM_SIZE-1];
+	
+`ifdef SIMULATION
+	initial
+	begin
+		$readmemh("prog.hex", mem);
+	end
+`endif
 	
 	always @ (posedge clk)
 	begin
@@ -40,6 +50,6 @@ module avr_cpu_progmem(
 		.WDATA(16'b0),
 		.WE(1'b1),
 		.MASK(16'b0));*/
-	
+
 endmodule
 
