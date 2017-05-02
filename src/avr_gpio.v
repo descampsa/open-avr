@@ -14,7 +14,7 @@ module avr_gpio
 	
 	wire [PORT_WIDTH-1:0] PIN;
 	
-	reg io_data_out;
+	reg [7:0] io_data_out;
 	assign io_data = io_read ? io_data_out : 8'bZ;
 	
 `ifdef SIMULATION
@@ -30,12 +30,15 @@ module avr_gpio
 	genvar i;
 	for(i=0; i<PORT_WIDTH; i=i+1)
 	begin
-		SB_IO #(.PIN_TYPE(6'b101001))//{PIN_OUTPUT_TRISTATE, PIN_INPUT}
+		SB_IO #(.PIN_TYPE(6'b100100), //{PIN_OUTPUT_REGISTERED_ENABLE, PIN_INPUT_REGISTERED}
+				.PULLUP(1'b0))
 			portb0_pin(
 				.PACKAGE_PIN(gpio[i]),
 				.OUTPUT_ENABLE(DDR[i]),
 				.D_OUT_0(PORT[i]),
-				.D_IN_0(PIN[i]));
+				.OUTPUT_CLK(clk),
+				.D_IN_0(PIN[i]),
+				.INPUT_CLK(clk));
 	end
 `endif
 
@@ -46,24 +49,25 @@ module avr_gpio
 			DDR <= {PORT_WIDTH{1'b0}};
 			PORT <= {PORT_WIDTH{1'b0}};
 		end
-		
-		if(io_write)
+		else
 		begin
-			if(io_addr == (IO_ADDR+1))
-				DDR <= io_data[PORT_WIDTH-1:0];
-			if(io_addr == (IO_ADDR+2))
-				PORT <= io_data[PORT_WIDTH-1:0];
+			if(io_write)
+			begin
+				if(io_addr == (IO_ADDR+1))
+					DDR <= io_data[PORT_WIDTH-1:0];
+				if(io_addr == (IO_ADDR+2))
+					PORT <= io_data[PORT_WIDTH-1:0];
+			end
+			
+			if(io_read)
+			begin
+				if(io_addr == IO_ADDR)
+					io_data_out <= {{8-PORT_WIDTH{1'b0}}, PIN};
+				if(io_addr == (IO_ADDR+1))
+					io_data_out <= {{8-PORT_WIDTH{1'b0}}, DDR};
+				if(io_addr == (IO_ADDR+2))
+					io_data_out <= {{8-PORT_WIDTH{1'b0}}, PORT};
+			end
 		end
-		
-		if(io_read)
-		begin
-			if(io_addr == IO_ADDR)
-				io_data_out <= {{8-PORT_WIDTH{1'b0}}, PIN};
-			if(io_addr == (IO_ADDR+1))
-				io_data_out <= {{8-PORT_WIDTH{1'b0}}, DDR};
-			if(io_addr == (IO_ADDR+2))
-				io_data_out <= {{8-PORT_WIDTH{1'b0}}, PORT};
-		end
-		
 	end
 endmodule
