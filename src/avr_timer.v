@@ -54,9 +54,10 @@ module avr_timer
 			end
 			
 			prescaler <= prescaler+1;
+			
 			prescaled_clk_prev <= prescaled_clk;
 			
-			if(prescaled_clk && !prescaled_clk_prev)
+			if(TCCR == 3'b001 || (prescaled_clk && !prescaled_clk_prev))
 			begin
 				TCNT <= TCNT+1;
 			end
