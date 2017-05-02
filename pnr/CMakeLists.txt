@@ -7,4 +7,5 @@ add_synthesis_target(attiny11 ${CMAKE_CURRENT_SOURCE_DIR}/attiny11.pcf
 	${CMAKE_CURRENT_SOURCE_DIR}/../src/avr_cpu_exec.v
 	${CMAKE_CURRENT_SOURCE_DIR}/../src/avr_cpu_alu.v
 	${CMAKE_CURRENT_SOURCE_DIR}/../src/avr_cpu_register.v
-	${CMAKE_CURRENT_SOURCE_DIR}/../src/avr_gpio.v)
+	${CMAKE_CURRENT_SOURCE_DIR}/../src/avr_gpio.v
+	${CMAKE_CURRENT_SOURCE_DIR}/../src/avr_timer.v)

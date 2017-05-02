@@ -6,3 +6,4 @@ set_io portb[2] 97
 set_io portb[3] 98
 set_io portb[4] 99
 set_io portb[5] 101
+set_io T0 102
